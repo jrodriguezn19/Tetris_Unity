@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class TetrisBlock : MonoBehaviour
 {
+    public Vector3 rotationPoint;
     private float lastTime = 0;
-    private float deltaFallTime = 1.0f;
+    private static float deltaFallTime = 1.0f;
+    public static int height = 20;
+    public static int width = 10;
+    private static Transform[,] grid = new Transform[width, height];
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,9 +23,25 @@ public class TetrisBlock : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             transform.position += new Vector3(-1, 0, 0);
-        }else if (Input.GetKeyDown(KeyCode.RightArrow))
+            if (!ValidArea())
+            {
+                transform.position -= new Vector3(-1, 0, 0);
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             transform.position += new Vector3(1, 0, 0);
+            if (!ValidArea())
+            {
+                transform.position -= new Vector3(1, 0, 0);
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            //rotate !
+            //transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), 90);
+            //if (!ValidArea())
+             //   transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
         }
 
  
@@ -28,8 +49,27 @@ public class TetrisBlock : MonoBehaviour
         if (Time.time - lastTime > (Input.GetKey(KeyCode.DownArrow) ? deltaFallTime / 10 : deltaFallTime ))
         {
             transform.position += new Vector3(0, -1, 0);
+            if (!ValidArea())
+            {
+                transform.position -= new Vector3(0, -1, 0);
+            }
             lastTime = Time.time;
         }
         Debug.Log(Time.time);
+    }
+
+    bool ValidArea()
+    {
+        foreach (Transform children in transform)
+        {
+            int roundedX = Mathf.RoundToInt(children.transform.position.x);
+            int roundedY = Mathf.RoundToInt(children.transform.position.y);
+
+            if(roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
