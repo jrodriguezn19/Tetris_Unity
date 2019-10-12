@@ -55,6 +55,7 @@ public class TetrisBlock : MonoBehaviour
             if (!ValidArea())
             {
                 transform.position -= new Vector3(0, -1, 0);
+                AddToGrid();
                 this.enabled = false;
                 FindObjectOfType<CreatorBlocks>().CreateBlock();
             }
@@ -74,7 +75,20 @@ public class TetrisBlock : MonoBehaviour
             {
                 return false;
             }
+            if (grid[roundedX, roundedY] != null)
+                return false;
         }
         return true;
+    }
+
+    void AddToGrid()
+    {
+        foreach (Transform children in transform)
+        {
+            int roundedX = Mathf.RoundToInt(children.transform.position.x);
+            int roundedY = Mathf.RoundToInt(children.transform.position.y);
+
+            grid[roundedX, roundedY] = children;
+        }
     }
 }
