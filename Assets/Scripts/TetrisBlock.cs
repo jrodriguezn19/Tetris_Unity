@@ -55,6 +55,8 @@ public class TetrisBlock : MonoBehaviour
             if (!ValidArea())
             {
                 transform.position -= new Vector3(0, -1, 0);
+                this.enabled = false;
+                FindObjectOfType<CreatorBlocks>().CreateBlock();
             }
             lastTime = Time.time;
         }
