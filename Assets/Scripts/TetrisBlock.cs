@@ -6,7 +6,7 @@ public class TetrisBlock : MonoBehaviour
 {
     public Vector3 rotationPoint;
     private float lastTime = 0;
-    private static float deltaFallTime = 1.0f;
+    public float fallTime = 0.8f;
     public static int height = 20;
     public static int width = 10;
     private static Transform[,] grid = new Transform[width, height];
@@ -38,15 +38,18 @@ public class TetrisBlock : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            //rotate !
-            //transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), 90);
-            //if (!ValidArea())
-             //   transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
+            //rotate ! 
+            transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), 90);
+            if (!ValidArea())
+            {
+                transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
+            }
+                
         }
 
  
         
-        if (Time.time - lastTime > (Input.GetKey(KeyCode.DownArrow) ? deltaFallTime / 10 : deltaFallTime ))
+        if (Time.time - lastTime > (Input.GetKey(KeyCode.DownArrow) ? fallTime / 10 : fallTime ))
         {
             transform.position += new Vector3(0, -1, 0);
             if (!ValidArea())
