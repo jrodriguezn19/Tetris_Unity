@@ -56,6 +56,8 @@ public class TetrisBlock : MonoBehaviour
             {
                 transform.position -= new Vector3(0, -1, 0);
                 AddToGame();
+                CheckLineCompleted();
+
                 this.enabled = false;
                 FindObjectOfType<CreatorBlocks>().CreateBlock();
             }
@@ -99,7 +101,7 @@ public class TetrisBlock : MonoBehaviour
             if (HasLine(i))
             {
                 DeleteLine(i);
-                
+                RowDown(i);
             }
         }
     }
@@ -123,6 +125,23 @@ public class TetrisBlock : MonoBehaviour
             grid[j, i] = null;
         }
     }
+
+    void RowDown(int i)
+    {
+        for (int y = i; y < height; y++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                if (grid[j, y] != null)
+                {
+                    grid[j, y - 1] = grid[j, y];
+                    grid[j, y] = null;
+                    grid[j, y - 1].transform.position -= new Vector3(0, 1, 0);
+                }
+            }
+        }
+    }
+
 
 
 
