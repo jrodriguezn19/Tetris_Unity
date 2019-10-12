@@ -55,7 +55,7 @@ public class TetrisBlock : MonoBehaviour
             if (!ValidArea())
             {
                 transform.position -= new Vector3(0, -1, 0);
-                AddToGrid();
+                AddToGame();
                 this.enabled = false;
                 FindObjectOfType<CreatorBlocks>().CreateBlock();
             }
@@ -81,7 +81,7 @@ public class TetrisBlock : MonoBehaviour
         return true;
     }
 
-    void AddToGrid()
+    void AddToGame()
     {
         foreach (Transform children in transform)
         {
