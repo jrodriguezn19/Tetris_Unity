@@ -91,4 +91,39 @@ public class TetrisBlock : MonoBehaviour
             grid[roundedX, roundedY] = children;
         }
     }
+
+    void CheckLineCompleted()
+    {
+        for (int i = height - 1; i >= 0; i--)
+        {
+            if (HasLine(i))
+            {
+                DeleteLine(i);
+                
+            }
+        }
+    }
+
+    bool HasLine(int i)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            if (grid[j, i] == null)
+                return false;
+        }
+
+        return true;
+    }
+
+    void DeleteLine(int i)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            Destroy(grid[j, i].gameObject);
+            grid[j, i] = null;
+        }
+    }
+
+
+
 }
