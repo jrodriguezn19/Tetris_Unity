@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class TetrisBlock : MonoBehaviour
 {
-    public Vector3 middlePoint;
-    private float lastTime = 0;
-    public float deltaFallTime = 1.0f;
     public static int boardY = 20;
     public static int boardX = 10;
+    public Vector3 center;
     private static Transform[,] mesh = new Transform[boardX, boardY];
+    private float lastTime = 0;
+    public float deltaFallTime = 1.0f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -40,10 +41,10 @@ public class TetrisBlock : MonoBehaviour
         }//Rotate Tetris blocks        
         else if (Input.GetKeyDown(KeyCode.UpArrow) == true)
         {           
-            transform.RotateAround(transform.TransformPoint(middlePoint), new Vector3(0, 0, 1), 90);
+            transform.RotateAround(transform.TransformPoint(center), new Vector3(0, 0, 1), 90);
             if (validMovement() == false)
             {
-                transform.RotateAround(transform.TransformPoint(middlePoint), new Vector3(0, 0, 1), -90);
+                transform.RotateAround(transform.TransformPoint(center), new Vector3(0, 0, 1), -90);
             }                
         }
         //Accelerate falling speed
@@ -66,16 +67,17 @@ public class TetrisBlock : MonoBehaviour
     //Check if the requested movement is valid   
     bool validMovement()
     {
-        foreach (Transform children in transform)
+        foreach (Transform block in transform)
         {
-            int roundedX = Mathf.RoundToInt(children.transform.position.x);
-            int roundedY = Mathf.RoundToInt(children.transform.position.y);
+            int intX = Mathf.RoundToInt(block.transform.position.x);
 
-            if(roundedX < 0 || roundedX >= boardX || roundedY < 0 || roundedY >= boardY)
+            int intY = Mathf.RoundToInt(block.transform.position.y);
+
+            if(intX < 0 || intX >= boardX || intY < 0 || intY >= boardY)
             {
                 return false;
             }
-            if (mesh[roundedX, roundedY] != null)
+            if (mesh[intX, intY] != null)
                 return false;
         }
         return true;
@@ -86,6 +88,7 @@ public class TetrisBlock : MonoBehaviour
         foreach (Transform block in transform)
         {
             int intX = Mathf.RoundToInt(block.transform.position.x);
+
             int intY = Mathf.RoundToInt(block.transform.position.y);
 
             mesh[intX, intY] = block;
@@ -108,7 +111,7 @@ public class TetrisBlock : MonoBehaviour
     {
         for (int i = 0; i < boardX; i++)
         {
-            if (mesh[i, t] == null)
+            if (mesh[i,t] == null)
             {
                 return false;
             }
@@ -122,7 +125,7 @@ public class TetrisBlock : MonoBehaviour
     {
         for (int i = 0; i < boardX; i++)
         {
-            Destroy(mesh[i, t].gameObject);
+            Destroy(mesh[i,t].gameObject);
             mesh[i, t] = null;
         }
     }
@@ -133,11 +136,11 @@ public class TetrisBlock : MonoBehaviour
         {
             for (int i = 0; i < boardX; i++)
             {
-                if (mesh[i, y] != null)
+                if (mesh[i,y] != null)
                 {
-                    mesh[i, y - 1] = mesh[i, y];
-                    mesh[i, y] = null;
-                    mesh[i, y - 1].transform.position -= new Vector3(0, 1, 0);
+                    mesh[i,y-1] = mesh[i,y];
+                    mesh[i,y] = null;
+                    mesh[i,y-1].transform.position -= new Vector3(0, 1, 0);
                 }
             }
         }
