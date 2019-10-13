@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class CreatorBlocks : MonoBehaviour
 {
     public GameObject[] blocks;
-    public Text linesText;
     
     // Start is called before the first frame update
     void Start()
@@ -17,7 +16,7 @@ public class CreatorBlocks : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       // linesText.text = linesCounter.ToString();
+
     }
     //Create a new Tetris Block
     public void CreateBlock()

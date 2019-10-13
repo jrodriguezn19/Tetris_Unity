@@ -19,16 +19,13 @@ public class TetrisBlock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       // if (EditorUtility.DisplayDialog("", "Game Over", "Ok"))
-        //{
-         //   SceneManager.LoadScene("StartMenu");
-        //}
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Move Tetris blocks to the right
+        //Move Tetris block to the right
         if (Input.GetKeyDown(KeyCode.RightArrow) == true)
         {
             transform.position += new Vector3(1, 0, 0);
@@ -37,7 +34,7 @@ public class TetrisBlock : MonoBehaviour
                 transform.position -= new Vector3(1, 0, 0);
             }
         }
-        //Move Tetris blocks to the left
+        //Move Tetris block to the left
         else if (Input.GetKeyDown(KeyCode.LeftArrow) == true)
         {
             transform.position += new Vector3(-1, 0, 0);
@@ -45,10 +42,14 @@ public class TetrisBlock : MonoBehaviour
             {
                 transform.position -= new Vector3(-1, 0, 0);
             }
-        }//Rotate Tetris blocks        
+        }//Rotate Tetris block        
         else if (Input.GetKeyDown(KeyCode.UpArrow) == true)
         {           
-            transform.RotateAround(transform.TransformPoint(center), new Vector3(0, 0, 1), 90);
+            for(int i  = 0; i <= 90; i = i + 10)
+            {
+                transform.RotateAround(transform.TransformPoint(center), new Vector3(0, 0, 1), i);
+            }
+            
             if (validMovement() == false)
             {
                 transform.RotateAround(transform.TransformPoint(center), new Vector3(0, 0, 1), -90);
@@ -58,8 +59,8 @@ public class TetrisBlock : MonoBehaviour
         {
             SceneManager.LoadScene("StartMenu");
         }
-        //Accelerate falling speed
-        if (Time.time - lastTime > (Input.GetKey(KeyCode.DownArrow) ? deltaFallTime / 10 : deltaFallTime ))
+        //Move Tetris block down
+        if (Time.time - lastTime > (Input.GetKey(KeyCode.DownArrow) ? (deltaFallTime / 10) : deltaFallTime ))
         {
             transform.position += new Vector3(0, -1, 0);
             if (validMovement() == false)
@@ -67,7 +68,6 @@ public class TetrisBlock : MonoBehaviour
                 transform.position -= new Vector3(0, -1, 0);
                 AddNew();
                 LineCompleted();
-
                 this.enabled = false;
                 FindObjectOfType<CreatorBlocks>().CreateBlock();
             }
