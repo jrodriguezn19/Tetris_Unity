@@ -284,8 +284,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da5a7b43a39d344895d5f1e83b002ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  middlePoint: {x: 0, y: 0, z: 0}
-  deltaFallTime: 0.8
+  center: {x: 0, y: 0, z: 0}
+  deltaFallTime: 1
 --- !u!1 &8601469854141467227
 GameObject:
   m_ObjectHideFlags: 0

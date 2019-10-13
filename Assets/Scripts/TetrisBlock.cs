@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class TetrisBlock : MonoBehaviour
 {
@@ -10,12 +12,17 @@ public class TetrisBlock : MonoBehaviour
     private static Transform[,] mesh = new Transform[boardX, boardY];
     private float lastTime = 0;
     public float deltaFallTime = 1.0f;
+    public static int linesCounter = 0;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+       // if (EditorUtility.DisplayDialog("", "Game Over", "Ok"))
+        //{
+         //   SceneManager.LoadScene("StartMenu");
+        //}
     }
 
     // Update is called once per frame
@@ -46,6 +53,10 @@ public class TetrisBlock : MonoBehaviour
             {
                 transform.RotateAround(transform.TransformPoint(center), new Vector3(0, 0, 1), -90);
             }                
+        }// Finish the game if escape key is pressed
+        else if (Input.GetKeyDown(KeyCode.Escape) == true)
+        {
+            SceneManager.LoadScene("StartMenu");
         }
         //Accelerate falling speed
         if (Time.time - lastTime > (Input.GetKey(KeyCode.DownArrow) ? deltaFallTime / 10 : deltaFallTime ))
@@ -73,12 +84,15 @@ public class TetrisBlock : MonoBehaviour
 
             int intY = Mathf.RoundToInt(block.transform.position.y);
 
-            if(intX < 0 || intX >= boardX || intY < 0 || intY >= boardY)
+            if((intX < 0) || (intX >= boardX) || (intY < 0) || (intY >= boardY))
             {
                 return false;
             }
             if (mesh[intX, intY] != null)
+            {
                 return false;
+            }
+                
         }
         return true;
     }
@@ -99,10 +113,11 @@ public class TetrisBlock : MonoBehaviour
     {
         for (int i = boardY - 1; i >= 0; i--)
         {
-            if (checkLine(i))
+            if (checkLine(i) == true)
             {
+                linesCounter++;
                 RemoveLine(i);
-                MoveDownAll(i);
+                MoveAllDown(i);                
             }
         }
     }
@@ -130,17 +145,17 @@ public class TetrisBlock : MonoBehaviour
         }
     }
     //Move down all Tetris blocks
-    void MoveDownAll(int t)
+    void MoveAllDown(int t)
     {
-        for (int y = t; y < boardY; y++)
+        for (int i = t; i < boardY; i++)
         {
-            for (int i = 0; i < boardX; i++)
+            for (int j = 0; j < boardX; j++)
             {
-                if (mesh[i,y] != null)
+                if (mesh[j,i] != null)
                 {
-                    mesh[i,y-1] = mesh[i,y];
-                    mesh[i,y] = null;
-                    mesh[i,y-1].transform.position -= new Vector3(0, 1, 0);
+                    mesh[j,i-1] = mesh[j,i];
+                    mesh[j,i] = null;
+                    mesh[j,i-1].transform.position -= new Vector3(0, 1, 0);
                 }
             }
         }

@@ -9,4 +9,14 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene("GameScene1");
     }
+
+    public void PlayLevel2()
+    {
+        SceneManager.LoadScene("GameScene2");
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }
