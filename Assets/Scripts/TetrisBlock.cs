@@ -9,7 +9,7 @@ public class TetrisBlock : MonoBehaviour
     public float deltaFallTime = 1.0f;
     public static int boardY = 20;
     public static int boardX = 10;
-    private static Transform[,] grid = new Transform[boardX, boardY];
+    private static Transform[,] mesh = new Transform[boardX, boardY];
 
     // Start is called before the first frame update
     void Start()
@@ -75,7 +75,7 @@ public class TetrisBlock : MonoBehaviour
             {
                 return false;
             }
-            if (grid[roundedX, roundedY] != null)
+            if (mesh[roundedX, roundedY] != null)
                 return false;
         }
         return true;
@@ -88,7 +88,7 @@ public class TetrisBlock : MonoBehaviour
             int intX = Mathf.RoundToInt(block.transform.position.x);
             int intY = Mathf.RoundToInt(block.transform.position.y);
 
-            grid[intX, intY] = block;
+            mesh[intX, intY] = block;
         }
     }
     //Check Line completed then remove and move everything down
@@ -108,7 +108,7 @@ public class TetrisBlock : MonoBehaviour
     {
         for (int i = 0; i < boardX; i++)
         {
-            if (grid[i, t] == null)
+            if (mesh[i, t] == null)
             {
                 return false;
             }
@@ -122,8 +122,8 @@ public class TetrisBlock : MonoBehaviour
     {
         for (int i = 0; i < boardX; i++)
         {
-            Destroy(grid[i, t].gameObject);
-            grid[i, t] = null;
+            Destroy(mesh[i, t].gameObject);
+            mesh[i, t] = null;
         }
     }
     //Move down all Tetris blocks
@@ -133,11 +133,11 @@ public class TetrisBlock : MonoBehaviour
         {
             for (int i = 0; i < boardX; i++)
             {
-                if (grid[i, y] != null)
+                if (mesh[i, y] != null)
                 {
-                    grid[i, y - 1] = grid[i, y];
-                    grid[i, y] = null;
-                    grid[i, y - 1].transform.position -= new Vector3(0, 1, 0);
+                    mesh[i, y - 1] = mesh[i, y];
+                    mesh[i, y] = null;
+                    mesh[i, y - 1].transform.position -= new Vector3(0, 1, 0);
                 }
             }
         }
