@@ -17,7 +17,7 @@ public class CreatorBlocks : MonoBehaviour
     {
         
     }
-
+    //Create a new Tetris Block
     public void CreateBlock()
     {
         Instantiate(blocks[Random.Range(0, blocks.Length)], transform.position, Quaternion.identity);

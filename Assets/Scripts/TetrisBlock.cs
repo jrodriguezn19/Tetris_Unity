@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class TetrisBlock : MonoBehaviour
 {
-    public Vector3 rotationPoint;
+    public Vector3 middlePoint;
     private float lastTime = 0;
-    public float fallTime = 0.8f;
-    public static int height = 20;
-    public static int width = 10;
-    private static Transform[,] grid = new Transform[width, height];
+    public float deltaFallTime = 1.0f;
+    public static int boardY = 20;
+    public static int boardX = 10;
+    private static Transform[,] grid = new Transform[boardX, boardY];
 
     // Start is called before the first frame update
     void Start()
@@ -20,60 +20,58 @@ public class TetrisBlock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            transform.position += new Vector3(-1, 0, 0);
-            if (!ValidArea())
-            {
-                transform.position -= new Vector3(-1, 0, 0);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        //Move Tetris blocks to the right
+        if (Input.GetKeyDown(KeyCode.RightArrow) == true)
         {
             transform.position += new Vector3(1, 0, 0);
-            if (!ValidArea())
+            if (validMovement() == false)
             {
                 transform.position -= new Vector3(1, 0, 0);
             }
         }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        //Move Tetris blocks to the left
+        else if (Input.GetKeyDown(KeyCode.LeftArrow) == true)
         {
-            //rotate ! 
-            transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), 90);
-            if (!ValidArea())
+            transform.position += new Vector3(-1, 0, 0);
+            if (validMovement() == false)
             {
-                transform.RotateAround(transform.TransformPoint(rotationPoint), new Vector3(0, 0, 1), -90);
+                transform.position -= new Vector3(-1, 0, 0);
             }
-                
+        }//Rotate Tetris blocks        
+        else if (Input.GetKeyDown(KeyCode.UpArrow) == true)
+        {           
+            transform.RotateAround(transform.TransformPoint(middlePoint), new Vector3(0, 0, 1), 90);
+            if (validMovement() == false)
+            {
+                transform.RotateAround(transform.TransformPoint(middlePoint), new Vector3(0, 0, 1), -90);
+            }                
         }
-
- 
-        
-        if (Time.time - lastTime > (Input.GetKey(KeyCode.DownArrow) ? fallTime / 10 : fallTime ))
+        //Accelerate falling speed
+        if (Time.time - lastTime > (Input.GetKey(KeyCode.DownArrow) ? deltaFallTime / 10 : deltaFallTime ))
         {
             transform.position += new Vector3(0, -1, 0);
-            if (!ValidArea())
+            if (validMovement() == false)
             {
                 transform.position -= new Vector3(0, -1, 0);
-                AddToGame();
-                CheckLineCompleted();
+                AddNew();
+                LineCompleted();
 
                 this.enabled = false;
                 FindObjectOfType<CreatorBlocks>().CreateBlock();
             }
             lastTime = Time.time;
         }
-        Debug.Log(Time.time);
     }
 
-    bool ValidArea()
+    //Check if the requested movement is valid   
+    bool validMovement()
     {
         foreach (Transform children in transform)
         {
             int roundedX = Mathf.RoundToInt(children.transform.position.x);
             int roundedY = Mathf.RoundToInt(children.transform.position.y);
 
-            if(roundedX < 0 || roundedX >= width || roundedY < 0 || roundedY >= height)
+            if(roundedX < 0 || roundedX >= boardX || roundedY < 0 || roundedY >= boardY)
             {
                 return false;
             }
@@ -82,61 +80,64 @@ public class TetrisBlock : MonoBehaviour
         }
         return true;
     }
-
-    void AddToGame()
+    //Add new
+    void AddNew()
     {
-        foreach (Transform children in transform)
+        foreach (Transform block in transform)
         {
-            int roundedX = Mathf.RoundToInt(children.transform.position.x);
-            int roundedY = Mathf.RoundToInt(children.transform.position.y);
+            int intX = Mathf.RoundToInt(block.transform.position.x);
+            int intY = Mathf.RoundToInt(block.transform.position.y);
 
-            grid[roundedX, roundedY] = children;
+            grid[intX, intY] = block;
         }
     }
-
-    void CheckLineCompleted()
+    //Check Line completed then remove and move everything down
+    void LineCompleted()
     {
-        for (int i = height - 1; i >= 0; i--)
+        for (int i = boardY - 1; i >= 0; i--)
         {
-            if (HasLine(i))
+            if (checkLine(i))
             {
-                DeleteLine(i);
-                RowDown(i);
+                RemoveLine(i);
+                MoveDownAll(i);
             }
         }
     }
-
-    bool HasLine(int i)
+    //Check if there was a line completed
+    bool checkLine(int t)
     {
-        for (int j = 0; j < width; j++)
+        for (int i = 0; i < boardX; i++)
         {
-            if (grid[j, i] == null)
+            if (grid[i, t] == null)
+            {
                 return false;
+            }
+                
         }
 
         return true;
     }
-
-    void DeleteLine(int i)
+    //Remove completed line
+    void RemoveLine(int t)
     {
-        for (int j = 0; j < width; j++)
+        for (int i = 0; i < boardX; i++)
         {
-            Destroy(grid[j, i].gameObject);
-            grid[j, i] = null;
+            Destroy(grid[i, t].gameObject);
+            grid[i, t] = null;
         }
     }
-
-    void RowDown(int i)
+    //Move down all Tetris blocks
+    void MoveDownAll(int t)
     {
-        for (int y = i; y < height; y++)
+        for (int y = t; y < boardY; y++)
         {
-            for (int j = 0; j < width; j++)
+            for (int i = 0; i < boardX; i++)
             {
-                if (grid[j, y] != null)
+                if (grid[i, y] != null)
                 {
-                    grid[j, y - 1] = grid[j, y];
-                    grid[j, y] = null;
-                    grid[j, y - 1].transform.position -= new Vector3(0, 1, 0);
+                    grid[i, y - 1] = grid[i, y];
+                    grid[i, y] = null;
+                    grid[i, y - 1].transform.position -= new Vector3(0, 1, 0);
                 }
             }
         }
