@@ -1,2 +1,2 @@
 # Tetris - Unity
-My recreation of Tetris developed in Unity.
+My version of Tetris developed in Unity 3D.
