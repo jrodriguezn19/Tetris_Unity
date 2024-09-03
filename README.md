@@ -1,5 +1,5 @@
 # Tetris - Unity
-Tetris game developed in Unity 3D with C#.
+My version of the Tetris game developed using Unity 3D with C#.
 
 ![enter image description here](https://github.com/jrodriguez19/Tetris_Unity/blob/master/Tetrix1.png?raw=true)
 
