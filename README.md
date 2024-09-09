@@ -1,6 +1,6 @@
 # Tetrix - Unity
 
-Tetrix is a modern take on the classic Tetris game, developed using C# and Unity. This version features multiple levels with increasing difficulty, smooth block mechanics, and an intuitive user interface.
+Tetrix is a modern take on the classic Tetris game, developed using C# and Unity. This version features multiple levels with increasing difficulty.
 
 ## Screenshots
 
@@ -17,9 +17,8 @@ _Gameplay screenshot showcasing falling Tetrominoes._
 ## Features
 
 - **Multiple Levels:** Begin with simpler blocks in Level 1 and challenge yourself with more complex patterns in Level 2.
-- **Dynamic Gameplay:** Enjoy classic Tetris mechanics reimagined with a modern visual twist.
-- **Intuitive User Interface:** The UI is designed for easy navigation and a seamless gaming experience.
-- **Quit Button:** Quickly exit the game from the main menu.
+- **Dynamic Gameplay:** Enjoy classic Tetris mechanics with a modern visual twist.
+- **Intuitive User Interface:** The UI is designed for easy and simple navigation.
 
 ## Installation
 
@@ -41,7 +40,8 @@ Press the play button in Unity to test the game or build it for your preferred p
 * Rotate Block (Clockwise): Up Arrow  
 * Rotate Block (Counterclockwise): Down Arrow  
 * Hard Drop: Spacebar  
-* Pause Game: P  
+* Pause Game: P
+   
 ## Technical Details
 * Programming Language: C#  
 * Game Engine: Unity  
